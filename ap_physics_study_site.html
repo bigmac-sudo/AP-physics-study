@@ -1,0 +1,1670 @@
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #080c14;
+    --surface: #0e1420;
+    --surface2: #141c2e;
+    --surface3: #1a2438;
+    --accent: #4f9eff;
+    --accent2: #7c3aed;
+    --accent3: #10d9b4;
+    --text: #e8edf8;
+    --text2: #8b9ab8;
+    --text3: #4a5a78;
+    --border: rgba(79,158,255,0.15);
+    --border2: rgba(79,158,255,0.08);
+    --gold: #f59e0b;
+    --green: #22c55e;
+    --red: #ef4444;
+    --quiz: #7c3aed;
+    --radius: 12px;
+  }
+
+  body {
+    font-family: 'Syne', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* PHYSICS BACKGROUND */
+  #physics-bg {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.35;
+  }
+
+  .site-wrap { position: relative; z-index: 1; }
+
+  /* NAV */
+  nav {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0 24px;
+    height: 56px;
+    background: rgba(8,12,20,0.9);
+    border-bottom: 1px solid var(--border);
+    backdrop-filter: blur(12px);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    flex-wrap: wrap;
+  }
+
+  .nav-logo {
+    font-family: 'Space Mono', monospace;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: 0.05em;
+    margin-right: 12px;
+    white-space: nowrap;
+  }
+
+  .nav-tabs {
+    display: flex;
+    gap: 2px;
+    flex: 1;
+    flex-wrap: wrap;
+  }
+
+  .nav-tab {
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    background: transparent;
+    color: var(--text2);
+    transition: all 0.2s;
+    letter-spacing: 0.03em;
+    white-space: nowrap;
+  }
+
+  .nav-tab:hover { color: var(--text); background: var(--surface2); }
+  .nav-tab.active { background: var(--accent); color: #fff; }
+
+  /* PAGES */
+  .page { display: none; min-height: calc(100vh - 56px); }
+  .page.active { display: block; }
+
+  /* HERO */
+  .hero {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: calc(100vh - 56px);
+    text-align: center;
+    padding: 40px 24px;
+  }
+
+  .hero-badge {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    color: var(--accent);
+    text-transform: uppercase;
+    border: 1px solid var(--border);
+    padding: 5px 14px;
+    border-radius: 20px;
+    margin-bottom: 24px;
+    background: rgba(79,158,255,0.07);
+  }
+
+  .hero h1 {
+    font-size: clamp(36px, 6vw, 64px);
+    font-weight: 800;
+    line-height: 1.1;
+    margin-bottom: 16px;
+    letter-spacing: -0.02em;
+  }
+
+  .hero h1 span { color: var(--accent); }
+
+  .hero p {
+    font-size: 17px;
+    color: var(--text2);
+    max-width: 540px;
+    line-height: 1.6;
+    margin-bottom: 40px;
+  }
+
+  .hero-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    max-width: 900px;
+    width: 100%;
+  }
+
+  .hero-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 24px 20px;
+    cursor: pointer;
+    transition: all 0.25s;
+    text-align: left;
+  }
+
+  .hero-card:hover {
+    border-color: var(--accent);
+    background: var(--surface2);
+    transform: translateY(-2px);
+  }
+
+  .hero-card-icon {
+    font-size: 28px;
+    margin-bottom: 12px;
+  }
+
+  .hero-card h3 {
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+
+  .hero-card p {
+    font-size: 13px;
+    color: var(--text2);
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  /* LEARNING PATH PAGE */
+  .path-page {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 40px 24px;
+  }
+
+  .path-header {
+    margin-bottom: 40px;
+  }
+
+  .path-header h2 {
+    font-size: 28px;
+    font-weight: 800;
+    margin-bottom: 8px;
+  }
+
+  .path-header p {
+    color: var(--text2);
+    font-size: 14px;
+  }
+
+  /* UNIT SECTION */
+  .unit-section {
+    margin-bottom: 48px;
+  }
+
+  .unit-label {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+
+  .unit-badge {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--accent);
+    background: rgba(79,158,255,0.1);
+    border: 1px solid rgba(79,158,255,0.25);
+    padding: 4px 10px;
+    border-radius: 6px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  .unit-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text);
+  }
+
+  .unit-line {
+    flex: 1;
+    height: 1px;
+    background: var(--border2);
+  }
+
+  /* PATH NODES */
+  .path-track {
+    position: relative;
+    padding-left: 32px;
+  }
+
+  .path-track::before {
+    content: '';
+    position: absolute;
+    left: 11px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: linear-gradient(to bottom, rgba(79,158,255,0.4), rgba(79,158,255,0.05));
+  }
+
+  .path-node {
+    position: relative;
+    margin-bottom: 12px;
+  }
+
+  .path-node::before {
+    content: '';
+    position: absolute;
+    left: -25px;
+    top: 18px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--surface3);
+    border: 2px solid var(--border);
+    z-index: 1;
+    transition: all 0.2s;
+  }
+
+  .path-node:hover::before,
+  .path-node .node-btn:focus::before {
+    border-color: var(--accent);
+    background: var(--accent);
+  }
+
+  .node-btn {
+    width: 100%;
+    background: var(--surface);
+    border: 1px solid var(--border2);
+    border-radius: var(--radius);
+    padding: 14px 16px;
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .node-btn:hover {
+    border-color: var(--border);
+    background: var(--surface2);
+  }
+
+  .node-btn.quiz-node {
+    border-color: rgba(124,58,237,0.3);
+    background: rgba(124,58,237,0.06);
+  }
+
+  .node-btn.quiz-node:hover {
+    border-color: rgba(124,58,237,0.6);
+    background: rgba(124,58,237,0.12);
+  }
+
+  .node-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+    background: var(--surface3);
+  }
+
+  .node-icon.lesson { background: rgba(79,158,255,0.12); }
+  .node-icon.quiz { background: rgba(124,58,237,0.15); }
+  .node-icon.assessment { background: rgba(245,158,11,0.12); }
+
+  .node-content { flex: 1; min-width: 0; }
+
+  .node-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+    line-height: 1.3;
+  }
+
+  .node-sub {
+    font-size: 12px;
+    color: var(--text2);
+    margin-top: 2px;
+  }
+
+  .node-arrow {
+    color: var(--text3);
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+
+  /* LESSON MODAL */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.75);
+    z-index: 200;
+    display: none;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 20px;
+    overflow-y: auto;
+    backdrop-filter: blur(4px);
+  }
+
+  .modal-overlay.open { display: flex; }
+
+  .modal {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    width: 100%;
+    max-width: 760px;
+    margin: auto;
+    overflow: hidden;
+    animation: modalIn 0.25s ease;
+  }
+
+  @keyframes modalIn {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .modal-header {
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--border2);
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .modal-header-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+    background: rgba(79,158,255,0.12);
+  }
+
+  .modal-header-text { flex: 1; }
+
+  .modal-header-text h3 {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+
+  .modal-header-text p {
+    font-size: 13px;
+    color: var(--text2);
+  }
+
+  .modal-close {
+    background: var(--surface2);
+    border: 1px solid var(--border2);
+    border-radius: 8px;
+    padding: 6px 10px;
+    cursor: pointer;
+    color: var(--text2);
+    font-size: 18px;
+    line-height: 1;
+    transition: all 0.15s;
+    flex-shrink: 0;
+  }
+
+  .modal-close:hover { color: var(--text); border-color: var(--border); }
+
+  .modal-body {
+    padding: 24px;
+    max-height: 70vh;
+    overflow-y: auto;
+  }
+
+  /* VIDEO EMBED */
+  .video-wrapper {
+    background: #000;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 20px;
+    aspect-ratio: 16/9;
+    position: relative;
+  }
+
+  .video-wrapper iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+  }
+
+  /* CONTENT SECTIONS */
+  .content-section {
+    margin-bottom: 20px;
+    background: var(--surface2);
+    border: 1px solid var(--border2);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+
+  .content-section-header {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border2);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-family: 'Space Mono', monospace;
+  }
+
+  .content-section-body {
+    padding: 16px;
+  }
+
+  .key-concept {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--text2);
+  }
+
+  .key-concept::before {
+    content: '→';
+    color: var(--accent);
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  .formula-box {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 16px;
+    font-family: 'Space Mono', monospace;
+    font-size: 13px;
+    color: var(--accent3);
+    margin-bottom: 10px;
+  }
+
+  /* QUIZ SECTION */
+  .quiz-container {
+    padding: 4px;
+  }
+
+  .quiz-question {
+    margin-bottom: 20px;
+    background: var(--surface2);
+    border: 1px solid var(--border2);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+
+  .quiz-q-header {
+    padding: 12px 16px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+    border-bottom: 1px solid var(--border2);
+    line-height: 1.5;
+  }
+
+  .quiz-q-num {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--text3);
+    margin-bottom: 4px;
+  }
+
+  .quiz-options {
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .quiz-option {
+    padding: 10px 14px;
+    border-radius: 8px;
+    border: 1px solid var(--border2);
+    font-size: 13px;
+    cursor: pointer;
+    background: var(--surface);
+    color: var(--text2);
+    transition: all 0.15s;
+    text-align: left;
+    width: 100%;
+  }
+
+  .quiz-option:hover { border-color: var(--accent); color: var(--text); background: var(--surface3); }
+  .quiz-option.correct { border-color: var(--green); background: rgba(34,197,94,0.1); color: var(--green); }
+  .quiz-option.wrong { border-color: var(--red); background: rgba(239,68,68,0.1); color: var(--red); }
+  .quiz-option:disabled { cursor: default; }
+
+  .quiz-feedback {
+    padding: 8px 16px 12px;
+    font-size: 12px;
+    color: var(--text2);
+    line-height: 1.5;
+    display: none;
+  }
+
+  .quiz-feedback.show { display: block; }
+  .quiz-feedback.correct-fb { color: var(--green); }
+  .quiz-feedback.wrong-fb { color: var(--text2); }
+
+  .submit-quiz-btn {
+    width: 100%;
+    padding: 12px;
+    background: var(--accent);
+    border: none;
+    border-radius: 10px;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: 'Syne', sans-serif;
+    letter-spacing: 0.02em;
+    margin-top: 8px;
+  }
+
+  .submit-quiz-btn:hover { opacity: 0.9; transform: translateY(-1px); }
+
+  .quiz-result {
+    text-align: center;
+    padding: 20px;
+    background: var(--surface2);
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    margin-top: 16px;
+    display: none;
+  }
+
+  .quiz-result.show { display: block; }
+  .quiz-result-score { font-size: 36px; font-weight: 800; color: var(--accent); margin-bottom: 8px; }
+  .quiz-result-msg { font-size: 14px; color: var(--text2); }
+
+  /* FLASHCARDS PAGE */
+  .flashcard-page {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 40px 24px;
+  }
+
+  .flashcard-page h2 {
+    font-size: 28px;
+    font-weight: 800;
+    margin-bottom: 8px;
+  }
+
+  .fc-filter {
+    display: flex;
+    gap: 8px;
+    margin: 20px 0;
+    flex-wrap: wrap;
+  }
+
+  .fc-filter-btn {
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--text2);
+    transition: all 0.2s;
+  }
+
+  .fc-filter-btn.active, .fc-filter-btn:hover {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #fff;
+  }
+
+  .flashcard {
+    perspective: 1000px;
+    height: 200px;
+    margin-bottom: 16px;
+    cursor: pointer;
+  }
+
+  .flashcard-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.5s;
+    transform-style: preserve-3d;
+  }
+
+  .flashcard.flipped .flashcard-inner { transform: rotateY(180deg); }
+
+  .fc-front, .fc-back {
+    position: absolute;
+    inset: 0;
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 24px;
+    backface-visibility: hidden;
+  }
+
+  .fc-front {
+    background: var(--surface);
+  }
+
+  .fc-back {
+    background: var(--surface2);
+    border-color: rgba(79,158,255,0.25);
+    transform: rotateY(180deg);
+  }
+
+  .fc-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text3);
+    margin-bottom: 10px;
+  }
+
+  .fc-term {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1.3;
+  }
+
+  .fc-definition {
+    font-size: 14px;
+    color: var(--text2);
+    line-height: 1.6;
+  }
+
+  .fc-formula {
+    font-family: 'Space Mono', monospace;
+    font-size: 13px;
+    color: var(--accent3);
+    margin-top: 8px;
+  }
+
+  /* MINDMAP PAGE */
+  .mindmap-page {
+    padding: 32px 24px;
+    max-width: 100%;
+    overflow-x: auto;
+  }
+
+  .mindmap-page h2 {
+    font-size: 28px;
+    font-weight: 800;
+    margin-bottom: 8px;
+  }
+
+  .mindmap-page p {
+    color: var(--text2);
+    font-size: 14px;
+    margin-bottom: 24px;
+  }
+
+  .coming-soon {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 300px;
+    text-align: center;
+    color: var(--text3);
+    gap: 12px;
+  }
+
+  .coming-soon-icon { font-size: 40px; }
+  .coming-soon h3 { font-size: 18px; color: var(--text2); }
+  .coming-soon p { font-size: 13px; max-width: 300px; }
+
+  /* SCROLLBAR */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--surface3); border-radius: 3px; }
+</style>
+
+<canvas id="physics-bg"></canvas>
+
+<div class="site-wrap">
+  <nav>
+    <div class="nav-logo">⚛ PHYSICA</div>
+    <div class="nav-tabs">
+      <button class="nav-tab active" onclick="showPage('home')">Home</button>
+      <button class="nav-tab" onclick="showPage('phys1')">Physics 1</button>
+      <button class="nav-tab" onclick="showPage('phys2')">Physics 2</button>
+      <button class="nav-tab" onclick="showPage('physc')">Physics C</button>
+      <button class="nav-tab" onclick="showPage('flashcards')">Flashcards</button>
+      <button class="nav-tab" onclick="showPage('mindmap')">Mind Map</button>
+    </div>
+  </nav>
+
+  <!-- HOME -->
+  <div id="page-home" class="page active">
+    <div class="hero">
+      <div class="hero-badge">AP Physics Study Hub</div>
+      <h1>Master <span>Physics</span><br>From 1 to C</h1>
+      <p>Interactive lessons, quizzes, and concept maps for AP Physics 1, 2, and C. Your path to a 5 starts here.</p>
+      <div class="hero-cards">
+        <div class="hero-card" onclick="showPage('phys1')">
+          <div class="hero-card-icon">🎯</div>
+          <h3>AP Physics 1</h3>
+          <p>Kinematics, forces, energy, momentum, waves & circuits</p>
+        </div>
+        <div class="hero-card" onclick="showPage('phys2')">
+          <div class="hero-card-icon">⚡</div>
+          <h3>AP Physics 2</h3>
+          <p>Fluids, thermodynamics, E&M, optics & modern physics</p>
+        </div>
+        <div class="hero-card" onclick="showPage('physc')">
+          <div class="hero-card-icon">∫</div>
+          <h3>AP Physics C</h3>
+          <p>Calculus-based mechanics and electromagnetism</p>
+        </div>
+        <div class="hero-card" onclick="showPage('flashcards')">
+          <div class="hero-card-icon">🃏</div>
+          <h3>Flashcards</h3>
+          <p>All key terms, equations, and concepts across units</p>
+        </div>
+        <div class="hero-card" onclick="showPage('mindmap')">
+          <div class="hero-card-icon">🕸</div>
+          <h3>Mind Map</h3>
+          <p>See how all Physics C concepts connect visually</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PHYSICS 1 PATH -->
+  <div id="page-phys1" class="page">
+    <div class="path-page">
+      <div class="path-header">
+        <div class="unit-badge" style="margin-bottom:10px">AP Physics 1</div>
+        <h2>Learning Path</h2>
+        <p>Click any lesson to open it. No progress tracking — explore freely.</p>
+      </div>
+
+      <!-- UNIT 1 -->
+      <div class="unit-section">
+        <div class="unit-label">
+          <div class="unit-badge">Unit 1</div>
+          <div class="unit-title">Kinematics</div>
+          <div class="unit-line"></div>
+        </div>
+        <div class="path-track">
+          <div class="path-node">
+            <button class="node-btn" onclick="openLesson('u1l1')">
+              <div class="node-icon lesson">📐</div>
+              <div class="node-content">
+                <div class="node-title">Lesson 1 — One-Dimensional Foundations</div>
+                <div class="node-sub">Scalars vs vectors, displacement, average velocity</div>
+              </div>
+              <div class="node-arrow">›</div>
+            </button>
+          </div>
+          <div class="path-node">
+            <button class="node-btn" onclick="openLesson('u1l2')">
+              <div class="node-icon lesson">📈</div>
+              <div class="node-content">
+                <div class="node-title">Lesson 2 — Graphical Analysis & Kinematic Equations</div>
+                <div class="node-sub">x-t, v-t, a-t graphs · SUVAT equations</div>
+              </div>
+              <div class="node-arrow">›</div>
+            </button>
+          </div>
+          <div class="path-node">
+            <button class="node-btn" onclick="openLesson('u1l3')">
+              <div class="node-icon lesson">🚂</div>
+              <div class="node-content">
+                <div class="node-title">Lesson 3 — Reference Frames & Relative Motion</div>
+                <div class="node-sub">Inertial frames, relative velocity equation</div>
+              </div>
+              <div class="node-arrow">›</div>
+            </button>
+          </div>
+          <div class="path-node">
+            <button class="node-btn quiz-node" onclick="openLesson('u1a1')">
+              <div class="node-icon assessment">📝</div>
+              <div class="node-content">
+                <div class="node-title">Assessment 1 — Lessons 1–3</div>
+                <div class="node-sub">FRQ + Quiz · 5 questions</div>
+              </div>
+              <div class="node-arrow">›</div>
+            </button>
+          </div>
+          <div class="path-node">
+            <button class="node-btn" onclick="openLesson('u1l4')">
+              <div class="node-icon lesson">🎾</div>
+              <div class="node-content">
+                <div class="node-title">Lesson 4 — Two-Dimensional Motion</div>
+                <div class="node-sub">Projectile motion, vector components, range</div>
+              </div>
+              <div class="node-arrow">›</div>
+            </button>
+          </div>
+          <div class="path-node">
+            <button class="node-btn quiz-node" onclick="openLesson('u1final')">
+              <div class="node-icon assessment">🏆</div>
+              <div class="node-content">
+                <div class="node-title">Unit 1 Assessment — Kinematics Mastery</div>
+                <div class="node-sub">Ballistic pendulum · Full unit quiz</div>
+              </div>
+              <div class="node-arrow">›</div>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- UNIT 2 -->
+      <div class="unit-section">
+        <div class="unit-label">
+          <div class="unit-badge">Unit 2</div>
+          <div class="unit-title">Dynamics (Newton's Laws)</div>
+          <div class="unit-line"></div>
+        </div>
+        <div class="path-track">
+          <div class="path-node">
+            <button class="node-btn" onclick="openLesson('u2l1')">
+              <div class="node-icon lesson">⚙️</div>
+              <div class="node-content">
+                <div class="node-title">Lesson 1 — Systems, Representations & Center of Mass</div>
+                <div class="node-sub">Object model, FBDs, CM derivation</div>
+              </div>
+              <div class="node-arrow">›</div>
+            </button>
+          </div>
+          <div class="path-node">
+            <button class="node-btn" onclick="openLesson('u2l2')">
+              <div class="node-icon lesson">🔵</div>
+              <div class="node-content">
+                <div class="node-title">Lesson 2 — Newton's Three Laws & Differential Dynamics</div>
+                <div class="node-sub">F=dp/dt, impulse-momentum, 2D collisions</div>
+              </div>
+              <div class="node-arrow">›</div>
+            </button>
+          </div>
+          <div class="path-node">
+            <button class="node-btn" onclick="openLesson('u2l3')">
+              <div class="node-icon lesson">🌍</div>
+              <div class="node-content">
+                <div class="node-title">Lesson 3 — Interaction Forces</div>
+                <div class="node-sub">Gravity, friction, normal force, tension</div>
+              </div>
+              <div class="node-arrow">›</div>
+            </button>
+          </div>
+          <div class="path-node">
+            <button class="node-btn quiz-node" onclick="openLesson('u2a1')">
+              <div class="node-icon assessment">📝</div>
+              <div class="node-content">
+                <div class="node-title">Assessment 1 — Mid-Unit Review</div>
+                <div class="node-sub">Cart ranking FRQ + 5-question quiz</div>
+              </div>
+              <div class="node-arrow">›</div>
+            </button>
+          </div>
+          <div class="path-node">
+            <button class="node-btn" onclick="openLesson('u2l4')">
+              <div class="node-icon lesson">🌀</div>
+              <div class="node-content">
+                <div class="node-title">Lesson 4 — Springs & Uniform Circular Motion</div>
+                <div class="node-sub">SHM, centripetal force, periods</div>
+              </div>
+              <div class="node-arrow">›</div>
+            </button>
+          </div>
+          <div class="path-node">
+            <button class="node-btn quiz-node" onclick="openLesson('u2final')">
+              <div class="node-icon assessment">🏆</div>
+              <div class="node-content">
+                <div class="node-title">Unit 2 Assessment — Dynamics Mastery</div>
+                <div class="node-sub">Ball/Play-Doh collision · Full unit quiz</div>
+              </div>
+              <div class="node-arrow">›</div>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- UNITS COMING SOON -->
+      <div class="unit-section">
+        <div class="unit-label">
+          <div class="unit-badge" style="opacity:0.4">Units 3–7</div>
+          <div class="unit-title" style="color:var(--text3)">Energy, Momentum, Rotation, Oscillations, Waves</div>
+          <div class="unit-line"></div>
+        </div>
+        <div style="padding: 20px 0 0 32px; color: var(--text3); font-size: 13px;">Coming soon — content in development</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PHYSICS 2 -->
+  <div id="page-phys2" class="page">
+    <div class="path-page">
+      <div class="path-header">
+        <div class="unit-badge" style="margin-bottom:10px">AP Physics 2</div>
+        <h2>Learning Path</h2>
+        <p>Physics 2 content coming soon.</p>
+      </div>
+      <div class="coming-soon">
+        <div class="coming-soon-icon">⚡</div>
+        <h3>Coming Soon</h3>
+        <p>Fluids, thermodynamics, E&M, optics and modern physics — in development.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- PHYSICS C -->
+  <div id="page-physc" class="page">
+    <div class="path-page">
+      <div class="path-header">
+        <div class="unit-badge" style="margin-bottom:10px">AP Physics C</div>
+        <h2>Learning Path</h2>
+        <p>Physics C content coming soon.</p>
+      </div>
+      <div class="coming-soon">
+        <div class="coming-soon-icon">∫</div>
+        <h3>Coming Soon</h3>
+        <p>Calculus-based mechanics and electromagnetism — in development.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- FLASHCARDS -->
+  <div id="page-flashcards" class="page">
+    <div class="flashcard-page">
+      <h2>Flashcards</h2>
+      <p style="color:var(--text2);font-size:14px;margin-bottom:8px">Click a card to reveal the definition. Filter by unit.</p>
+      <div class="fc-filter">
+        <button class="fc-filter-btn active" onclick="filterCards('all', this)">All</button>
+        <button class="fc-filter-btn" onclick="filterCards('u1', this)">Unit 1 — Kinematics</button>
+        <button class="fc-filter-btn" onclick="filterCards('u2', this)">Unit 2 — Dynamics</button>
+      </div>
+      <div id="fc-container"></div>
+    </div>
+  </div>
+
+  <!-- MINDMAP -->
+  <div id="page-mindmap" class="page">
+    <div class="mindmap-page">
+      <h2>Physics C Mind Map</h2>
+      <p>Visual connections between all units and Physics C calculus bridges.</p>
+      <div id="mindmap-svg-wrap"></div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="lesson-modal" onclick="handleOverlayClick(event)">
+  <div class="modal" id="modal-content"></div>
+</div>
+
+<script>
+const lessons = {
+  u1l1: {
+    icon: '📐',
+    title: 'Lesson 1 — One-Dimensional Foundations',
+    unit: 'Unit 1 · Kinematics',
+    videos: [
+      { title: 'Distance vs Displacement', yt: 'ZM8ECpBuQYE' },
+      { title: 'Introduction to Scalars and Vectors', yt: 'ihNZlp7iUHE' },
+      { title: 'Average Velocity and Speed', yt: '2DJXxBFKKoU' }
+    ],
+    concepts: [
+      'Displacement (Δx = x_f − x_i) is a vector — it has magnitude AND direction. Distance is scalar (path length).',
+      'Average velocity v_avg = Δx/Δt is a vector. Average speed = total distance / Δt is scalar.',
+      'In Physics C: instantaneous velocity v(t) = dx/dt — the time derivative of position.',
+      'In 1D, direction is simply a + or − sign relative to your chosen coordinate axis.',
+      'The Object Model treats any object as a point particle at its center of mass.'
+    ],
+    formulas: ['v_avg = Δx / Δt', 'Δx = x_f − x_i', 'v(t) = dx/dt  (Physics C)'],
+    quiz: 'u1q1'
+  },
+  u1l2: {
+    icon: '📈',
+    title: 'Lesson 2 — Graphical Analysis & Kinematic Equations',
+    unit: 'Unit 1 · Kinematics',
+    videos: [
+      { title: 'Interpreting Position-Time Graphs', yt: 'Zs5lqJKJcis' },
+      { title: 'Velocity-Time Graphs and Acceleration', yt: 'msKDXLfhGk8' },
+      { title: 'Kinematic Equations (SUVAT)', yt: 'q4zLMFCEq7A' }
+    ],
+    concepts: [
+      'The slope of an x vs t graph equals instantaneous velocity.',
+      'The slope of a v vs t graph equals acceleration.',
+      'The area under a v vs t graph equals displacement.',
+      'For constant acceleration, the kinematic equations (SUVAT) apply.',
+      'In Physics C: Δx = ∫v(t)dt — the Fundamental Theorem of Calculus.'
+    ],
+    formulas: [
+      'v = v₀ + at',
+      'Δx = v₀t + ½at²',
+      'v² = v₀² + 2aΔx',
+      'Δx = ∫v(t)dt  (Physics C)'
+    ],
+    quiz: 'u1q2'
+  },
+  u1l3: {
+    icon: '🚂',
+    title: 'Lesson 3 — Reference Frames & Relative Motion',
+    unit: 'Unit 1 · Kinematics',
+    videos: [
+      { title: 'Introduction to Reference Frames', yt: 'pQ3MivIjXiw' },
+      { title: 'Relative Velocity in 1D', yt: 'lSHCzBtKSBU' }
+    ],
+    concepts: [
+      'An inertial reference frame is one that is not accelerating.',
+      'Velocity is not absolute — it is always measured relative to a reference frame.',
+      'The Inner Subscript Rule: v_AC = v_AB + v_BC. The middle subscript "cancels."',
+      'In Physics C, vector derivatives give: v⃗_AC = v⃗_AB + v⃗_BC in 3D.'
+    ],
+    formulas: ['v_AC = v_AB + v_BC'],
+    quiz: 'u1q3'
+  },
+  u1a1: {
+    icon: '📝',
+    title: 'Assessment 1 — Lessons 1–3',
+    unit: 'Unit 1 · Kinematics',
+    isAssessment: true,
+    frq: 'A cart is released on a frictionless surface after an initial push. (a) Describe the cart\'s motion quantitatively and qualitatively. (b) If a constant net force is then applied, how does the slope of the momentum-time graph relate to that force? Justify using F = dp/dt.',
+    quiz: 'u1a1q'
+  },
+  u1l4: {
+    icon: '🎾',
+    title: 'Lesson 4 — Two-Dimensional Motion',
+    unit: 'Unit 1 · Kinematics',
+    videos: [
+      { title: 'Introduction to Projectile Motion', yt: 'wRF6c3UPDaU' },
+      { title: 'Projectile Motion — Solving Problems', yt: 'oNIhOJ5QLMY' }
+    ],
+    concepts: [
+      'In projectile motion, horizontal and vertical components are independent.',
+      'Horizontal: a_x = 0, so x = v₀cosθ · t (constant velocity).',
+      'Vertical: a_y = −g = −10 m/s², governed by SUVAT.',
+      'Time of flight is determined entirely by vertical dynamics.',
+      'In Physics C: r⃗(t) = r⃗₀ + v⃗₀t + ½a⃗t² as a vector position function.'
+    ],
+    formulas: [
+      'v_x = v₀cosθ,  v_y = v₀sinθ',
+      'y = v₀_y·t − ½gt²',
+      'x = v_x · t'
+    ],
+    quiz: 'u1q4'
+  },
+  u1final: {
+    icon: '🏆',
+    title: 'Unit 1 Assessment — Kinematics Mastery',
+    unit: 'Unit 1 · Kinematics',
+    isAssessment: true,
+    frq: 'A bullet (m₁) is fired horizontally at velocity v₁ into a stationary block (m₂) hanging from a string of length L. The block swings to angle θ. Derive an expression for v₁ in terms of m₁, m₂, g, L, and θ. Identify which phase conserves momentum and which conserves energy, and explain why.',
+    quiz: 'u1finalq'
+  },
+  u2l1: {
+    icon: '⚙️',
+    title: 'Lesson 1 — Systems, Representations & Center of Mass',
+    unit: 'Unit 2 · Dynamics',
+    videos: [
+      { title: 'Center of Mass', yt: 'mU0o3oFhrAA' },
+      { title: 'Free Body Diagrams', yt: 'V_tgQfZ9xGE' }
+    ],
+    concepts: [
+      'The Object Model represents any system as a point particle at its center of mass.',
+      'x_cm = (1/M)Σmᵢxᵢ — the weighted average of mass distribution.',
+      'FBDs treat the object as a point; Force Diagrams show a rigid body with shape.',
+      'F⃗_net,ext = M·a⃗_cm — only external forces change the system\'s center of mass motion.',
+      'Internal forces (between parts of a system) cancel in pairs by Newton\'s 3rd Law.'
+    ],
+    formulas: [
+      'x_cm = (1/M)Σmᵢxᵢ',
+      'v_cm = p_sys / M',
+      'F_net,ext = M·a_cm'
+    ],
+    quiz: 'u2q1'
+  },
+  u2l2: {
+    icon: '🔵',
+    title: "Lesson 2 — Newton's Three Laws & Differential Dynamics",
+    unit: 'Unit 2 · Dynamics',
+    videos: [
+      { title: "Newton's Second Law", yt: 'qQI5lQ8e4BM' },
+      { title: "Newton's Third Law", yt: 'By-ggTfeuJU' },
+      { title: 'Impulse and Momentum', yt: 'TEiChCz5dPQ' }
+    ],
+    concepts: [
+      "Newton's 1st Law: v⃗ is constant if ΣF⃗ = 0 (inertia).",
+      "Newton's 2nd Law: F⃗_net = ma⃗ or F⃗_net = dp⃗/dt (Physics C generalization).",
+      "Newton's 3rd Law: F⃗_AB = −F⃗_BA — action-reaction pairs are equal and opposite.",
+      'Impulse J = FΔt = Δp — the area under a Force-Time graph.',
+      'In 2D collisions, momentum is conserved independently in x and y.'
+    ],
+    formulas: [
+      'F_net = ma',
+      'F_net = dp/dt  (Physics C)',
+      'J = FΔt = Δp',
+      'F_avg = Δp/Δt'
+    ],
+    quiz: 'u2q2'
+  },
+  u2l3: {
+    icon: '🌍',
+    title: 'Lesson 3 — Interaction Forces',
+    unit: 'Unit 2 · Dynamics',
+    videos: [
+      { title: 'Gravity and Normal Force', yt: 'W2iiSrMmI1s' },
+      { title: 'Friction and its Types', yt: 'G7n4GCeIopw' }
+    ],
+    concepts: [
+      'Gravitational force: F_g = mg, always directed toward Earth\'s center.',
+      'Normal force is perpendicular to the surface — it adjusts to maintain contact.',
+      'Static friction f_s ≤ μ_s·F_n prevents sliding; kinetic friction f_k = μ_k·F_n opposes sliding.',
+      'Tension in an ideal string is constant throughout its length.',
+      'Longer collision time → smaller average force (impulse stays constant).'
+    ],
+    formulas: [
+      'F_g = mg',
+      'f_s ≤ μ_s · F_n',
+      'f_k = μ_k · F_n',
+      'F_avg = Δp/Δt  →  longer Δt means smaller F_avg'
+    ],
+    quiz: 'u2q3'
+  },
+  u2a1: {
+    icon: '📝',
+    title: 'Assessment 1 — Mid-Unit Review',
+    unit: 'Unit 2 · Dynamics',
+    isAssessment: true,
+    frq: 'Four carts move to the right on a frictionless surface. Cart A: m=10kg, v₀=5m/s, F=20N, t=5s. Cart B: m=20kg, v₀=3m/s, F=25N, t=6s. Cart C: m=30kg, v₀=4m/s, F=30N, t=4s. Cart D: m=40kg, v₀=2m/s, F=15N, t=6s. (a) Rank the carts by initial momentum. (b) Rank by impulse applied. (c) Rank by final momentum.',
+    quiz: 'u2a1q'
+  },
+  u2l4: {
+    icon: '🌀',
+    title: 'Lesson 4 — Springs & Uniform Circular Motion',
+    unit: 'Unit 2 · Dynamics',
+    videos: [
+      { title: 'Simple Harmonic Motion (Springs)', yt: 'eeYRkW1gEco' },
+      { title: 'Centripetal Acceleration', yt: 'nFHO1iAVbag' },
+      { title: 'Period of a Pendulum', yt: 'DdVWs7ZTNB8' }
+    ],
+    concepts: [
+      'Centripetal force is center-seeking and perpendicular to velocity: F_c = mv²/r.',
+      'For SHM: restoring force F = −kx (Hooke\'s Law).',
+      'Spring period: T = 2π√(m/k) — depends on mass.',
+      'Pendulum period: T = 2π√(L/g) — independent of mass!',
+      'V_max in SHM occurs at equilibrium (x=0), where all energy is kinetic.'
+    ],
+    formulas: [
+      'F_c = mv²/r',
+      'a_c = v²/r',
+      'T_spring = 2π√(m/k)',
+      'T_pendulum = 2π√(L/g)',
+      'V_max = A·√(k/m)'
+    ],
+    quiz: 'u2q4'
+  },
+  u2final: {
+    icon: '🏆',
+    title: 'Unit 2 Assessment — Dynamics Mastery',
+    unit: 'Unit 2 · Dynamics',
+    isAssessment: true,
+    frq: 'A tennis ball (m₁=0.058kg, v₁=5m/s rightward) and a Play-Doh ball (m₂=0.03kg, v₂=3m/s leftward) are thrown from height h=2m toward each other. They collide and stick at t=0.5s. (a) Find the velocity of the combined mass after collision. (b) Find the height of the collision point. (c) Calculate the horizontal range from the collision point to landing.',
+    quiz: 'u2finalq'
+  }
+};
+
+const quizData = {
+  u1q1: [
+    { q: 'Boat A starts at x=0 and ends at x=100m in 10s. Boat B starts at x=−50m and ends at x=50m in 10s. What is true about their average velocities?', opts: ['A is faster', 'B is faster', 'They are equal', 'Cannot be determined'], ans: 2, fb: 'Both have Δx=100m in 10s, so v_avg=10m/s each. Average velocity depends only on displacement and time, not starting position.' },
+    { q: 'Which of these is a scalar quantity?', opts: ['Displacement', 'Velocity', 'Acceleration', 'Distance'], ans: 3, fb: 'Distance is scalar (path length only, no direction). Displacement, velocity, and acceleration are all vectors.' },
+    { q: 'If an object returns to its starting point, its displacement is:', opts: ['Equal to total distance traveled', 'Positive', 'Zero', 'Negative'], ans: 2, fb: 'Displacement = x_f − x_i. If start = end, Δx = 0, regardless of path taken.' },
+    { q: 'In Physics C, instantaneous velocity is defined as:', opts: ['Δx/Δt over any interval', 'The limit of Δx/Δt as Δt→0', 'The average of all velocities', 'Speed in a given direction'], ans: 1, fb: 'v(t) = lim(Δt→0) Δx/Δt = dx/dt. This is the derivative definition of instantaneous velocity.' }
+  ],
+  u1q2: [
+    { q: 'On an x vs t graph, what does a constant non-zero slope indicate?', opts: ['Constant acceleration', 'Constant velocity (zero acceleration)', 'Changing velocity', 'Zero velocity'], ans: 1, fb: 'Slope of x-t = velocity. A constant slope means constant velocity, which means zero acceleration.' },
+    { q: 'A v-t graph shows velocity going from 0 to 20m/s over 2s, constant at 20m/s for 4s, then back to 0 over 4s. What is total displacement?', opts: ['100m', '120m', '140m', '160m'], ans: 2, fb: 'Region 1 (triangle): ½×2×20=20m. Region 2 (rectangle): 4×20=80m. Region 3 (triangle): ½×4×20=40m. Total=140m.' },
+    { q: 'Which kinematic equation is used when time is unknown?', opts: ['v = v₀ + at', 'Δx = v₀t + ½at²', 'v² = v₀² + 2aΔx', 'v_avg = Δx/Δt'], ans: 2, fb: 'v² = v₀² + 2aΔx does not contain t, making it ideal when time is not given or needed.' }
+  ],
+  u1q3: [
+    { q: 'A train moves East at 30m/s. A passenger walks West at 2m/s relative to the train. What is the passenger\'s velocity relative to the ground?', opts: ['+32m/s East', '+28m/s East', '−28m/s West', '−32m/s West'], ans: 1, fb: 'v_PG = v_PT + v_TG = (−2) + (30) = +28m/s. The inner subscript rule: v_PT + v_TG = v_PG.' },
+    { q: 'What is an inertial reference frame?', opts: ['Any frame on Earth', 'A frame that is not accelerating', 'A frame moving at constant speed only', 'A frame attached to the object'], ans: 1, fb: 'An inertial reference frame is one that has zero acceleration. Newton\'s laws hold exactly in inertial frames.' }
+  ],
+  u1a1q: [
+    { q: 'A stuntman drops from 45m. What is his speed just before impact? (g=10m/s²)', opts: ['20m/s', '25m/s', '30m/s', '35m/s'], ans: 2, fb: 'v²=v₀²+2aΔx → v²=0+2(10)(45)=900 → v=30m/s.' },
+    { q: 'Object A has twice the mass of B, both at the same velocity. How do their momenta compare?', opts: ['Equal momentum', 'A has twice B\'s momentum', 'B has twice A\'s momentum', 'Cannot determine'], ans: 1, fb: 'p=mv. Same v, A has 2m, so p_A=2mv=2p_B.' },
+    { q: 'Convert 15ms to seconds.', opts: ['0.15s', '0.015s', '1.5s', '150s'], ans: 1, fb: '15ms × (1s/1000ms) = 0.015s. milli = 10⁻³.' },
+    { q: 'Which is a scalar quantity?', opts: ['Displacement', 'Velocity', 'Acceleration', 'Distance'], ans: 3, fb: 'Distance is scalar. All others are vectors.' },
+    { q: 'On an x-t graph, a constant non-zero slope means:', opts: ['Positive acceleration', 'Zero acceleration (constant velocity)', 'Negative acceleration', 'Cannot tell'], ans: 1, fb: 'Slope of x-t = velocity. Constant slope = constant velocity = a=0.' }
+  ],
+  u1q4: [
+    { q: 'A ball launched at 10m/s at 60° above horizontal. What is v_x?', opts: ['5m/s', '8.66m/s', '10m/s', '0m/s'], ans: 0, fb: 'v_x = v·cos60° = 10×0.5 = 5m/s.' },
+    { q: 'In projectile motion, what determines the time of flight?', opts: ['Horizontal velocity only', 'Vertical dynamics only', 'Both equally', 'Initial speed'], ans: 1, fb: 'Time of flight is determined entirely by vertical kinematics (a_y = −g), independent of horizontal motion.' },
+    { q: 'A bullet is fired horizontally; another is dropped from the same height simultaneously. Which hits the ground first?', opts: ['Fired bullet', 'Dropped bullet', 'They hit at the same time', 'Depends on mass'], ans: 2, fb: 'Both experience the same vertical acceleration g. Horizontal velocity does not affect vertical fall. They land simultaneously.' }
+  ],
+  u1finalq: [
+    { q: 'In the ballistic pendulum, which phase conserves momentum?', opts: ['The swing phase', 'The impact phase', 'Both phases', 'Neither phase'], ans: 1, fb: 'During impact, the collision is inelastic and very brief — momentum is conserved. Kinetic energy is lost to deformation and heat.' },
+    { q: 'After the bullet-block collision, which energy principle applies to the swing?', opts: ['Momentum conservation', 'Mechanical energy conservation', 'Kinetic energy conservation', 'None of the above'], ans: 1, fb: 'During the swing (after collision), no external horizontal forces act, so mechanical energy (KE→PE) is conserved.' },
+    { q: 'A bullet of mass 0.01kg hits a 1kg block at rest. They stick together. If the bullet was at 300m/s, find the velocity of the system after collision.', opts: ['1.5m/s', '2.97m/s', '3.0m/s', '30m/s'], ans: 1, fb: 'p_i = 0.01×300 = 3kg·m/s. p_f = (0.01+1)v_f → v_f = 3/1.01 ≈ 2.97m/s.' }
+  ],
+  u2q1: [
+    { q: 'A wrench is thrown spinning through the air. Which path does the center of mass follow?', opts: ['A complex spiral', 'A straight line', 'A perfect parabola', 'A circle'], ans: 2, fb: 'Only external force is gravity acting on CM. Internal forces cancel. So CM follows a parabolic projectile path.' },
+    { q: 'In a Free Body Diagram, where do all force vectors originate?', opts: ['Point of application', 'Center of mass', 'The surface', 'The tip of each vector'], ans: 1, fb: 'FBDs treat the object as a point particle — all forces originate from the center of mass.' },
+    { q: 'x_cm for two masses m₁=2kg at x=0 and m₂=4kg at x=6m is:', opts: ['3m', '4m', '2m', '5m'], ans: 1, fb: 'x_cm = (m₁x₁+m₂x₂)/(m₁+m₂) = (2×0+4×6)/6 = 24/6 = 4m.' }
+  ],
+  u2q2: [
+    { q: 'A golfer hits a 0.05kg ball from rest to 70m/s in 0.001s. What is the average force?', opts: ['350N', '3500N', '35N', '35000N'], ans: 1, fb: 'Δp=0.05×70=3.5kg·m/s. F_avg=Δp/Δt=3.5/0.001=3500N.' },
+    { q: 'Two equal-mass objects approach each other. What is total momentum if they move at equal speeds?', opts: ['Doubled', 'Equal to mv', 'Zero', 'Halved'], ans: 2, fb: 'p_total = mv + m(−v) = 0. Momenta are equal and opposite, so they cancel.' },
+    { q: 'The area under a Force vs Time graph represents:', opts: ['Work', 'Power', 'Impulse', 'Momentum'], ans: 2, fb: 'J = ∫F dt = Δp. The area under F-t is impulse, which equals change in momentum.' }
+  ],
+  u2q3: [
+    { q: 'A stuntman (80kg) hits an airbag and stops in 1.5s from 30m/s. What is average force?', opts: ['800N', '1600N', '2400N', '3200N'], ans: 1, fb: 'Δp=80×30=2400kg·m/s. F_avg=2400/1.5=1600N. Longer time = smaller force!' },
+    { q: 'A car (1100kg) collides head-on with a van (2500kg at 8m/s) and both stop. What was the car\'s speed?', opts: ['12.5m/s', '18.2m/s', '20m/s', '22m/s'], ans: 1, fb: 'System stops → total initial p=0. 1100v + 2500(−8)=0 → v=20000/1100≈18.2m/s.' },
+    { q: 'Increasing the time of a collision primarily:', opts: ['Increases impulse', 'Reduces impulse', 'Reduces average force', 'Increases average force'], ans: 2, fb: 'J=F_avg×Δt=Δp is constant. Longer Δt means smaller F_avg. This is why airbags and crumple zones save lives.' }
+  ],
+  u2a1q: [
+    { q: 'Cart A: m=10kg, v₀=5m/s. Cart D: m=40kg, v₀=2m/s. Which has greater initial momentum?', opts: ['Cart A (p=50)', 'Cart D (p=80)', 'Equal', 'Depends on force'], ans: 1, fb: 'p_A=10×5=50kg·m/s. p_D=40×2=80kg·m/s. Cart D has greater initial momentum.' },
+    { q: 'Rank carts by impulse: A (F=20N,t=5s), B (F=25N,t=6s), C (F=30N,t=4s), D (F=15N,t=6s). Least to greatest:', opts: ['A,B,C,D', 'D,A,C,B', 'A,D,B,C', 'D,A,B,C'], ans: 1, fb: 'J=FΔt. J_A=100, J_B=150, J_C=120, J_D=90. Order: D(90)<A(100)<C(120)<B(150).' },
+    { q: 'A 1kg box has momentum 150N·s. A 20N force is applied to stop it. How long?', opts: ['5s', '7.5s', '10s', '15s'], ans: 1, fb: 't = Δp/F = 150/20 = 7.5s.' },
+    { q: 'A puck exerts 50N West on a player. What force does the player exert on the puck?', opts: ['50N West', '50N East', '25N East', '0N'], ans: 1, fb: "Newton's 3rd Law: forces are equal in magnitude and opposite in direction. Player exerts 50N East on puck." }
+  ],
+  u2q4: [
+    { q: 'Where is velocity maximum in SHM?', opts: ['At maximum displacement', 'At equilibrium (x=0)', 'At half amplitude', 'At any point'], ans: 1, fb: 'At x=0, potential energy is zero and all energy is kinetic, so KE (and speed) is maximum.' },
+    { q: 'A pendulum\'s mass is doubled. How does its period change?', opts: ['Doubles', 'Halves', 'Increases by √2', 'Unchanged'], ans: 3, fb: 'T=2π√(L/g) has no mass term. Period is completely independent of mass for a simple pendulum.' },
+    { q: 'A spring (k=200N/m) has a 0.5kg mass. What is the period?', opts: ['π/10 s', 'π/20 s', 'π s', '2π s'], ans: 0, fb: 'T=2π√(m/k)=2π√(0.5/200)=2π√(0.0025)=2π×0.05=π/10≈0.314s.' }
+  ],
+  u2finalq: [
+    { q: 'Tennis ball (0.058kg,5m/s) and Play-Doh (0.03kg, −3m/s) collide and stick. Find v_f.', opts: ['1.0m/s', '2.27m/s', '3.5m/s', '4.0m/s'], ans: 1, fb: 'p_i=(0.058)(5)+(0.03)(−3)=0.29−0.09=0.2kg·m/s. v_f=0.2/(0.088)≈2.27m/s rightward.' },
+    { q: 'After 0.5s of free fall from h=2m, how far have the objects fallen?', opts: ['0.5m', '1.0m', '1.25m', '2.0m'], ans: 2, fb: 'Δy=½gt²=½(10)(0.25)=1.25m. So collision height=2−1.25=0.75m above ground.' },
+    { q: 'The slope of a momentum-time graph represents:', opts: ['Impulse', 'Net force', 'Acceleration', 'Velocity'], ans: 1, fb: 'F=dp/dt. The slope of p(t) is the net force. For constant F, slope is constant; for variable F, slope changes.' },
+    { q: 'A 4kg rifle fires a 0.02kg bullet at 300m/s. What is the rifle\'s recoil velocity?', opts: ['−0.5m/s', '−1.0m/s', '−1.5m/s', '−2.0m/s'], ans: 2, fb: 'Conservation of momentum: 0=(0.02)(300)+(4)v_r → v_r=−6/4=−1.5m/s.' }
+  ]
+};
+
+const flashcards = [
+  { unit: 'u1', term: 'Displacement', def: 'The vector change in position: Δx = x_f − x_i. Has both magnitude and direction.', formula: 'Δx = x_f − x_i' },
+  { unit: 'u1', term: 'Average Velocity', def: 'Displacement divided by time interval. A vector quantity.', formula: 'v_avg = Δx / Δt' },
+  { unit: 'u1', term: 'Instantaneous Velocity', def: 'The limit of average velocity as the time interval approaches zero — the time derivative of position.', formula: 'v(t) = dx/dt' },
+  { unit: 'u1', term: 'Kinematic Equations (SUVAT)', def: 'Three equations for constant acceleration relating position, velocity, acceleration, and time.', formula: 'v=v₀+at · Δx=v₀t+½at² · v²=v₀²+2aΔx' },
+  { unit: 'u1', term: 'Relative Velocity', def: 'Velocity measured relative to a reference frame. v_AC = v_AB + v_BC (inner subscript rule).', formula: 'v_AC = v_AB + v_BC' },
+  { unit: 'u1', term: 'Projectile Motion', def: 'Motion under gravity with no air resistance. Horizontal and vertical components are independent.', formula: 'a_x=0, a_y=−g' },
+  { unit: 'u2', term: 'Newton\'s Second Law', def: 'Net force equals mass times acceleration — or the time derivative of momentum.', formula: 'F_net = ma = dp/dt' },
+  { unit: 'u2', term: 'Impulse', def: 'The product of force and time — equals the change in momentum. Area under F-t graph.', formula: 'J = FΔt = Δp' },
+  { unit: 'u2', term: 'Center of Mass', def: 'The weighted average position of mass in a system. Net external force accelerates the CM.', formula: 'x_cm = (1/M)Σmᵢxᵢ' },
+  { unit: 'u2', term: 'Centripetal Force', def: 'Center-seeking force required for circular motion. Always perpendicular to velocity.', formula: 'F_c = mv²/r' },
+  { unit: 'u2', term: 'Period of a Spring', def: 'Time for one full oscillation. Depends on mass and spring constant.', formula: 'T = 2π√(m/k)' },
+  { unit: 'u2', term: 'Period of a Pendulum', def: 'Time for one full oscillation. Depends on length and g — NOT mass.', formula: 'T = 2π√(L/g)' },
+  { unit: 'u2', term: 'Hooke\'s Law', def: 'The restoring force in SHM is proportional to displacement, opposite in direction.', formula: 'F = −kx' },
+  { unit: 'u2', term: 'Friction', def: 'Resistive contact force. Static prevents sliding; kinetic opposes sliding.', formula: 'f_k = μ_k·F_n · f_s ≤ μ_s·F_n' }
+];
+
+let activeQuiz = null;
+
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  const tabs = { home: 0, phys1: 1, phys2: 2, physc: 3, flashcards: 4, mindmap: 5 };
+  document.querySelectorAll('.nav-tab')[tabs[id]]?.classList.add('active');
+  if (id === 'flashcards') renderFlashcards('all');
+  if (id === 'mindmap') renderMindmap();
+}
+
+function openLesson(id) {
+  const L = lessons[id];
+  if (!L) return;
+  const modal = document.getElementById('modal-content');
+  activeQuiz = null;
+
+  let body = '';
+
+  if (L.isAssessment) {
+    body = `
+      <div class="content-section">
+        <div class="content-section-header">Free Response Question</div>
+        <div class="content-section-body" style="font-size:14px;color:var(--text2);line-height:1.7">${L.frq}</div>
+      </div>
+      <div style="font-size:12px;color:var(--text3);margin-bottom:16px;padding:0 0 0 4px">Complete the FRQ on paper, then take the quiz below to check your understanding.</div>
+      ${buildQuiz(L.quiz)}
+    `;
+  } else {
+    const vids = L.videos.map((v, i) => `
+      <div style="margin-bottom:${i < L.videos.length-1 ? '16px' : '0'}">
+        <div style="font-size:12px;color:var(--text3);margin-bottom:8px;font-family:'Space Mono',monospace">${v.title}</div>
+        <div class="video-wrapper">
+          <iframe src="https://www.youtube.com/embed/${v.yt}" allowfullscreen loading="lazy"></iframe>
+        </div>
+      </div>
+    `).join('');
+
+    const concepts = L.concepts.map(c => `<div class="key-concept">${c}</div>`).join('');
+    const formulas = L.formulas.map(f => `<div class="formula-box">${f}</div>`).join('');
+
+    body = `
+      <div class="content-section">
+        <div class="content-section-header">Videos</div>
+        <div class="content-section-body">${vids}</div>
+      </div>
+      <div class="content-section">
+        <div class="content-section-header">Key Concepts</div>
+        <div class="content-section-body">${concepts}</div>
+      </div>
+      <div class="content-section">
+        <div class="content-section-header">Formulas</div>
+        <div class="content-section-body">${formulas}</div>
+      </div>
+      <div style="font-size:12px;color:var(--text3);margin-bottom:16px;padding:4px">After watching the videos, test your knowledge:</div>
+      ${buildQuiz(L.quiz)}
+    `;
+  }
+
+  modal.innerHTML = `
+    <div class="modal-header">
+      <div class="modal-header-icon">${L.icon}</div>
+      <div class="modal-header-text">
+        <h3>${L.title}</h3>
+        <p>${L.unit}</p>
+      </div>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body">${body}</div>
+  `;
+
+  document.getElementById('lesson-modal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function buildQuiz(qid) {
+  const qs = quizData[qid];
+  if (!qs) return '';
+  activeQuiz = { id: qid, answers: new Array(qs.length).fill(null), submitted: false };
+
+  const qhtml = qs.map((q, qi) => `
+    <div class="quiz-question" id="qq-${qi}">
+      <div class="quiz-q-header">
+        <div class="quiz-q-num">Q${qi+1} of ${qs.length}</div>
+        ${q.q}
+      </div>
+      <div class="quiz-options">
+        ${q.opts.map((o, oi) => `<button class="quiz-option" onclick="selectOpt(${qi},${oi})" id="opt-${qi}-${oi}">${o}</button>`).join('')}
+      </div>
+      <div class="quiz-feedback" id="fb-${qi}"></div>
+    </div>
+  `).join('');
+
+  return `
+    <div class="content-section">
+      <div class="content-section-header">Quiz</div>
+      <div class="content-section-body quiz-container">
+        ${qhtml}
+        <button class="submit-quiz-btn" onclick="submitQuiz('${qid}')">Submit Quiz</button>
+        <div class="quiz-result" id="quiz-result-${qid}">
+          <div class="quiz-result-score" id="quiz-score-${qid}">0/${qs.length}</div>
+          <div class="quiz-result-msg" id="quiz-msg-${qid}"></div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function selectOpt(qi, oi) {
+  if (!activeQuiz || activeQuiz.submitted) return;
+  activeQuiz.answers[qi] = oi;
+  const parent = document.getElementById('qq-' + qi);
+  parent.querySelectorAll('.quiz-option').forEach((b, i) => {
+    b.style.borderColor = i === oi ? 'var(--accent)' : '';
+    b.style.color = i === oi ? 'var(--accent)' : '';
+    b.style.background = i === oi ? 'rgba(79,158,255,0.08)' : '';
+  });
+}
+
+function submitQuiz(qid) {
+  if (!activeQuiz || activeQuiz.submitted) return;
+  const qs = quizData[qid];
+  let score = 0;
+  activeQuiz.submitted = true;
+
+  qs.forEach((q, qi) => {
+    const sel = activeQuiz.answers[qi];
+    const parent = document.getElementById('qq-' + qi);
+    const opts = parent.querySelectorAll('.quiz-option');
+    const fb = document.getElementById('fb-' + qi);
+
+    opts.forEach(b => { b.disabled = true; b.style.borderColor = ''; b.style.color = ''; b.style.background = ''; });
+
+    if (sel === null) {
+      opts[q.ans].classList.add('correct');
+      fb.textContent = '⚠ Not answered. ' + q.fb;
+      fb.className = 'quiz-feedback show wrong-fb';
+    } else if (sel === q.ans) {
+      opts[sel].classList.add('correct');
+      fb.textContent = '✓ Correct! ' + q.fb;
+      fb.className = 'quiz-feedback show correct-fb';
+      score++;
+    } else {
+      opts[sel].classList.add('wrong');
+      opts[q.ans].classList.add('correct');
+      fb.textContent = '✗ ' + q.fb;
+      fb.className = 'quiz-feedback show wrong-fb';
+    }
+  });
+
+  const pct = Math.round((score / qs.length) * 100);
+  const msgs = ['Keep reviewing and try again!', 'Good start — review the concepts.', 'Nice work! A bit more practice.', 'Great job!', 'Perfect score! Excellent!'];
+  const mIdx = Math.floor(pct / 25);
+
+  document.getElementById('quiz-score-' + qid).textContent = score + '/' + qs.length + ' (' + pct + '%)';
+  document.getElementById('quiz-msg-' + qid).textContent = msgs[Math.min(mIdx, 4)];
+  document.getElementById('quiz-result-' + qid).classList.add('show');
+}
+
+function closeModal() {
+  document.getElementById('lesson-modal').classList.remove('open');
+  document.body.style.overflow = '';
+  activeQuiz = null;
+}
+
+function handleOverlayClick(e) {
+  if (e.target === document.getElementById('lesson-modal')) closeModal();
+}
+
+function filterCards(unit, btn) {
+  document.querySelectorAll('.fc-filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderFlashcards(unit);
+}
+
+function renderFlashcards(filter) {
+  const cards = filter === 'all' ? flashcards : flashcards.filter(c => c.unit === filter);
+  document.getElementById('fc-container').innerHTML = cards.map((c, i) => `
+    <div class="flashcard" onclick="this.classList.toggle('flipped')">
+      <div class="flashcard-inner">
+        <div class="fc-front">
+          <div class="fc-label">Term — click to reveal</div>
+          <div class="fc-term">${c.term}</div>
+        </div>
+        <div class="fc-back">
+          <div class="fc-label">Definition</div>
+          <div class="fc-definition">${c.def}</div>
+          <div class="fc-formula">${c.formula}</div>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function renderMindmap() {
+  document.getElementById('mindmap-svg-wrap').innerHTML = `
+    <svg viewBox="0 0 720 480" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:720px;display:block">
+      <defs>
+        <marker id="arr" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+          <path d="M0,0 L0,6 L8,3 z" fill="rgba(79,158,255,0.5)"/>
+        </marker>
+      </defs>
+      <!-- Center -->
+      <rect x="280" y="200" width="160" height="48" rx="10" fill="rgba(79,158,255,0.15)" stroke="rgba(79,158,255,0.5)" stroke-width="1.5"/>
+      <text x="360" y="220" text-anchor="middle" fill="#4f9eff" font-size="13" font-weight="700" font-family="Syne,sans-serif">AP Physics C</text>
+      <text x="360" y="238" text-anchor="middle" fill="#8b9ab8" font-size="11" font-family="Syne,sans-serif">Mechanics + E&M</text>
+      <!-- Unit 1 -->
+      <line x1="280" y1="224" x2="140" y2="130" stroke="rgba(79,158,255,0.3)" stroke-width="1" marker-end="url(#arr)"/>
+      <rect x="40" y="104" width="120" height="42" rx="8" fill="rgba(16,217,180,0.1)" stroke="rgba(16,217,180,0.4)" stroke-width="1"/>
+      <text x="100" y="122" text-anchor="middle" fill="#10d9b4" font-size="12" font-weight="700" font-family="Syne,sans-serif">Kinematics</text>
+      <text x="100" y="137" text-anchor="middle" fill="#8b9ab8" font-size="10" font-family="Syne,sans-serif">dx/dt, ∫v dt</text>
+      <!-- Unit 2 -->
+      <line x1="280" y1="210" x2="140" y2="224" stroke="rgba(79,158,255,0.3)" stroke-width="1" marker-end="url(#arr)"/>
+      <rect x="40" y="198" width="120" height="42" rx="8" fill="rgba(124,58,237,0.1)" stroke="rgba(124,58,237,0.4)" stroke-width="1"/>
+      <text x="100" y="216" text-anchor="middle" fill="#a78bfa" font-size="12" font-weight="700" font-family="Syne,sans-serif">Dynamics</text>
+      <text x="100" y="231" text-anchor="middle" fill="#8b9ab8" font-size="10" font-family="Syne,sans-serif">F=dp/dt, CM</text>
+      <!-- Energy -->
+      <line x1="280" y1="235" x2="140" y2="310" stroke="rgba(79,158,255,0.3)" stroke-width="1" marker-end="url(#arr)"/>
+      <rect x="40" y="288" width="120" height="42" rx="8" fill="rgba(245,158,11,0.1)" stroke="rgba(245,158,11,0.35)" stroke-width="1"/>
+      <text x="100" y="306" text-anchor="middle" fill="#f59e0b" font-size="12" font-weight="700" font-family="Syne,sans-serif">Energy & Work</text>
+      <text x="100" y="321" text-anchor="middle" fill="#8b9ab8" font-size="10" font-family="Syne,sans-serif">W=∫F·dx</text>
+      <!-- Rotation -->
+      <line x1="440" y1="224" x2="560" y2="140" stroke="rgba(79,158,255,0.3)" stroke-width="1" marker-end="url(#arr)"/>
+      <rect x="540" y="114" width="140" height="42" rx="8" fill="rgba(239,68,68,0.1)" stroke="rgba(239,68,68,0.35)" stroke-width="1"/>
+      <text x="610" y="132" text-anchor="middle" fill="#f87171" font-size="12" font-weight="700" font-family="Syne,sans-serif">Rotation</text>
+      <text x="610" y="147" text-anchor="middle" fill="#8b9ab8" font-size="10" font-family="Syne,sans-serif">τ=Iα, L=Iω</text>
+      <!-- Oscillations -->
+      <line x1="440" y1="218" x2="560" y2="224" stroke="rgba(79,158,255,0.3)" stroke-width="1" marker-end="url(#arr)"/>
+      <rect x="540" y="198" width="140" height="42" rx="8" fill="rgba(34,197,94,0.1)" stroke="rgba(34,197,94,0.35)" stroke-width="1"/>
+      <text x="610" y="216" text-anchor="middle" fill="#4ade80" font-size="12" font-weight="700" font-family="Syne,sans-serif">Oscillations</text>
+      <text x="610" y="231" text-anchor="middle" fill="#8b9ab8" font-size="10" font-family="Syne,sans-serif">SHM, d²x/dt²</text>
+      <!-- Gravity -->
+      <line x1="440" y1="232" x2="560" y2="310" stroke="rgba(79,158,255,0.3)" stroke-width="1" marker-end="url(#arr)"/>
+      <rect x="540" y="285" width="140" height="42" rx="8" fill="rgba(79,158,255,0.1)" stroke="rgba(79,158,255,0.35)" stroke-width="1"/>
+      <text x="610" y="303" text-anchor="middle" fill="#60a5fa" font-size="12" font-weight="700" font-family="Syne,sans-serif">Gravitation</text>
+      <text x="610" y="318" text-anchor="middle" fill="#8b9ab8" font-size="10" font-family="Syne,sans-serif">F=Gm₁m₂/r²</text>
+      <!-- E&M bottom -->
+      <line x1="360" y1="248" x2="360" y2="380" stroke="rgba(79,158,255,0.3)" stroke-width="1" marker-end="url(#arr)"/>
+      <rect x="260" y="374" width="200" height="42" rx="8" fill="rgba(16,217,180,0.07)" stroke="rgba(16,217,180,0.25)" stroke-width="1"/>
+      <text x="360" y="392" text-anchor="middle" fill="#10d9b4" font-size="12" font-weight="700" font-family="Syne,sans-serif">E&M (Physics C)</text>
+      <text x="360" y="407" text-anchor="middle" fill="#8b9ab8" font-size="10" font-family="Syne,sans-serif">∮E·dA, Faraday's Law</text>
+      <!-- Top label -->
+      <text x="360" y="36" text-anchor="middle" fill="#4a5a78" font-size="11" font-family="Space Mono,monospace" letter-spacing="2">PHYSICS CONCEPT MAP</text>
+    </svg>
+  `;
+}
+
+// PHYSICS BACKGROUND ANIMATION
+const canvas = document.getElementById('physics-bg');
+const ctx = canvas.getContext('2d');
+let W, H, particles = [], nodes = [];
+
+function resize() {
+  W = canvas.width = window.innerWidth;
+  H = canvas.height = window.innerHeight;
+}
+
+function initParticles() {
+  particles = [];
+  for (let i = 0; i < 60; i++) {
+    particles.push({
+      x: Math.random() * W,
+      y: Math.random() * H,
+      vx: (Math.random() - 0.5) * 0.4,
+      vy: (Math.random() - 0.5) * 0.4,
+      r: Math.random() * 2 + 1,
+      a: Math.random() * Math.PI * 2,
+      orb: Math.random() > 0.5
+    });
+  }
+}
+
+function drawBg(t) {
+  ctx.clearRect(0, 0, W, H);
+  // Draw grid
+  ctx.strokeStyle = 'rgba(79,158,255,0.04)';
+  ctx.lineWidth = 1;
+  for (let x = 0; x < W; x += 60) {
+    ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke();
+  }
+  for (let y = 0; y < H; y += 60) {
+    ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke();
+  }
+
+  // Parabola
+  ctx.strokeStyle = 'rgba(16,217,180,0.15)';
+  ctx.lineWidth = 1.5;
+  ctx.beginPath();
+  for (let x = 0; x <= 400; x += 4) {
+    const px = W * 0.1 + x;
+    const py = H * 0.2 + 0.005 * x * x - 1 * x;
+    x === 0 ? ctx.moveTo(px, py) : ctx.lineTo(px, py);
+  }
+  ctx.stroke();
+
+  // Sine wave
+  ctx.strokeStyle = 'rgba(124,58,237,0.12)';
+  ctx.lineWidth = 1.5;
+  ctx.beginPath();
+  for (let x = 0; x <= W; x += 3) {
+    const py = H * 0.75 + 40 * Math.sin((x / W) * Math.PI * 4 + t * 0.5);
+    x === 0 ? ctx.moveTo(x, py) : ctx.lineTo(x, py);
+  }
+  ctx.stroke();
+
+  // Circular orbit
+  const ox = W * 0.8, oy = H * 0.3, or_ = 80;
+  ctx.strokeStyle = 'rgba(79,158,255,0.08)';
+  ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.arc(ox, oy, or_, 0, Math.PI * 2); ctx.stroke();
+  const angle = t * 0.8;
+  ctx.fillStyle = 'rgba(79,158,255,0.5)';
+  ctx.beginPath(); ctx.arc(ox + or_ * Math.cos(angle), oy + or_ * Math.sin(angle), 4, 0, Math.PI * 2); ctx.fill();
+  ctx.fillStyle = 'rgba(245,158,11,0.6)';
+  ctx.beginPath(); ctx.arc(ox, oy, 7, 0, Math.PI * 2); ctx.fill();
+
+  // Particles
+  particles.forEach(p => {
+    p.x += p.vx; p.y += p.vy;
+    if (p.x < 0 || p.x > W) p.vx *= -1;
+    if (p.y < 0 || p.y > H) p.vy *= -1;
+    ctx.fillStyle = 'rgba(79,158,255,0.4)';
+    ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2); ctx.fill();
+  });
+
+  // Vector arrows on home page only
+  for (let i = 0; i < 5; i++) {
+    const ax = (W * 0.05) + (i * W * 0.18);
+    const ay = H * 0.5 + Math.sin(t + i) * 30;
+    const len = 35 + 15 * Math.sin(t * 0.7 + i);
+    ctx.strokeStyle = 'rgba(79,158,255,0.12)';
+    ctx.lineWidth = 1.5;
+    ctx.beginPath(); ctx.moveTo(ax, ay); ctx.lineTo(ax + len, ay); ctx.stroke();
+    ctx.fillStyle = 'rgba(79,158,255,0.15)';
+    ctx.beginPath(); ctx.moveTo(ax + len, ay); ctx.lineTo(ax + len - 6, ay - 4); ctx.lineTo(ax + len - 6, ay + 4); ctx.closePath(); ctx.fill();
+  }
+}
+
+let animT = 0;
+function animate() {
+  animT += 0.016;
+  drawBg(animT);
+  requestAnimationFrame(animate);
+}
+
+resize();
+initParticles();
+animate();
+window.addEventListener('resize', () => { resize(); initParticles(); });
+</script>
